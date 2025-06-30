@@ -1,0 +1,75 @@
+【爬虫项目报告】
+
+一、项目背景
+
+随着互联网信息的爆炸式增长，数据采集与分析能力成为现代社会的重要技能。豆瓣电影Top250榜单作为国内知名的电影评价平台，汇聚了大量高质量的电影数据。通过爬取该榜单，可以锻炼网络爬虫开发能力，并为后续的数据分析、可视化等工作打下基础。
+
+二、项目目标
+
+本项目旨在自动化抓取豆瓣电影Top250榜单的电影名称和评分，并将数据保存为CSV文件，便于后续分析和处理。
+
+三、技术选型
+
+1. Python 3：主流的编程语言，语法简洁，生态丰富。
+2. requests：用于发送HTTP请求，获取网页内容。
+3. BeautifulSoup：用于解析HTML页面，提取所需数据。
+4. csv：用于将数据保存为CSV格式。
+5. venv/uv：用于创建和管理Python虚拟环境，保证依赖隔离。
+
+四、实现过程
+
+1. 环境准备
+   - 使用 venv 创建虚拟环境，安装 requests 和 beautifulsoup4。
+2. 代码实现
+   - 通过 requests 获取豆瓣Top250每一页的HTML内容。
+   - 用 BeautifulSoup 解析页面，提取电影名称和评分。
+   - 将数据存入列表，最后写入CSV文件。
+3. 主要代码说明
+
+```python
+import requests
+from bs4 import BeautifulSoup
+import csv
+import time
+
+BASE_URL = "https://movie.douban.com/top250"
+HEADERS = {"User-Agent": "..."}
+
+def fetch_movies():
+    movies = []
+    for start in range(0, 250, 25):
+        url = f"{BASE_URL}?start={start}"
+        resp = requests.get(url, headers=HEADERS)
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        items = soup.find_all('div', class_='item')
+        for item in items:
+            title_tag = item.find('span', class_='title')
+            title = title_tag.text.strip() if title_tag else 'N/A'
+            rating_tag = item.find('span', class_='rating_num')
+            rating = rating_tag.text.strip() if rating_tag else 'N/A'
+            movies.append({'title': title, 'rating': rating})
+        time.sleep(1)
+    return movies
+```
+
+五、运行结果
+
+成功抓取到250部电影的数据，数据已保存为 douban_top250.csv 文件。部分数据示例：
+
+| title         | rating |
+|---------------|--------|
+| 肖申克的救赎  | 9.7    |
+| 霸王别姬      | 9.6    |
+| 阿甘正传      | 9.5    |
+
+
+六、遇到的问题与解决方法
+
+1. 反爬虫机制：豆瓣有一定的反爬虫措施，通过添加User-Agent和适当延时（time.sleep）解决。
+2. 页面结构变化：增加了健壮性判断，避免因页面结构微调导致程序报错。
+3. 依赖管理：使用虚拟环境，保证依赖不污染全局环境。
+
+七、总结与收获
+
+通过本项目，我掌握了Python爬虫的基本流程，包括请求发送、页面解析、数据存储等。遇到问题时学会了查阅文档和调试代码，提升了解决实际问题的能力。后续可进一步学习数据分析和可视化等内容。
+
