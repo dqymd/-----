@@ -34,4 +34,13 @@ source .venv/bin/activate  # macOS/Linux
    ```bash
    python main.py
    ```
-3. 结果会保存在 `douban_top250.csv` 文件中。 
+
+3. 结果会保存在 `douban_top250.csv` 文件中。
+
+## 视频预览
+
+你可以在下方直接观看项目运行效果视频：
+
+<video src="https://github.com/user-attachments/assets/91eec5e1-3842-408a-a5e0-6cc809a69806" controls width="600"></video>
+
+> 如无法播放，请前往 [issue 页面](https://github.com/dqymd/crawl/issues/1#issue-3187035468) 查看。
